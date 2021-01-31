@@ -1,0 +1,68 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <style>
+        body {
+            background-color: black;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #toggle {
+            width: 50px;
+            height: 50px;
+            background-color: darkgray;
+            outline: none;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+<button id="toggle"></button>
+
+<script src="./script.js"></script>
+<script>
+    $(function () {
+        $('#supported').text('Supported/allowed: ' + !!screenfull.isEnabled);
+
+        if (!screenfull.isEnabled) {
+            return false;
+        }
+
+        $('#toggle').click(function () {
+            screenfull.toggle($('#container')[0]);
+        });
+
+        $( "body" ).keypress(function( event ) {
+            if ( event.keyCode == 102 ) {
+                screenfull.toggle($('#container')[0])
+            }
+        });
+
+        function fullscreenchange() {
+            var elem = screenfull.element;
+
+            $('#status').text('Is fullscreen: ' + screenfull.isFullscreen);
+
+            if (elem) {
+                $('#element').text('Element: ' + elem.localName + (elem.id ? '#' + elem.id : ''));
+            }
+
+            if (!screenfull.isFullscreen) {
+                $('#external-iframe').remove();
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        screenfull.on('change', fullscreenchange);
+
+        // Set the initial values
+        fullscreenchange();
+    });
+</script>
+</body>
+</html>
